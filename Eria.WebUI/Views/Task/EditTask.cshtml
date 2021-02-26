@@ -1,0 +1,46 @@
+﻿@model Eria.Application.Tasks.Queries.GetTask.TaskVM
+
+@{
+    ViewData["Title"] = "Edit task";
+}
+
+<div class="row justify-content-center">
+    <div class="col-4 text-center">
+        <form asp-action="EditTask" asp-controller="Task">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-inline mt-3">
+                <label asp-for="TaskId" class="control-label w-25 justify-content-start"></label>
+                <input asp-for="TaskId" class="form-control w-75" disabled />
+                <span asp-validation-for="TaskId" class="text-danger"></span>
+            </div>
+            <div class="form-inline mt-3">
+                <label asp-for="WorkType" class="control-label w-25 justify-content-start"></label>
+                @Html.DropDownListFor(m => m.WorkTypeId,
+                      new SelectList(TempData["WorkTypes"] as List<Eria.Application.WorkTypesList.Queries.GetWorkTypes.WorkTypeDto>, "WorkTypeId", "Name"), new { @class = "form-control w-75" })
+                <span asp-validation-for="WorkType" class="text-danger"></span>
+            </div>
+            <div class="form-inline mt-3">
+                <label asp-for="Name" class="control-label w-25 justify-content-start"></label>
+                <input asp-for="Name" class="form-control w-75" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-inline mt-3">
+                <label asp-for="From" class="control-label w-25 justify-content-start"></label>
+                <input asp-for="From" class="form-control w-75" asp-format="{0:yyyy-MM-ddTHH:mm}" />
+                <span asp-validation-for="From" class="text-danger"></span>
+            </div>
+            <div class="form-inline mt-3">
+                <label asp-for="To" class="control-label w-25 justify-content-start"></label>
+                <input asp-for="To" class="form-control w-75" asp-format="{0:yyyy-MM-ddTHH:mm}" />
+                <span asp-validation-for="To" class="text-danger"></span>
+            </div>
+            <div class="form-group mt-3 text-center">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,100 @@
+﻿@model Eria.Application.Tasks.Queries.GetTasks.TasksVM
+@using Eria.Application.Tasks.Queries.GetTasks
+@inject Eria.Infrastructure.Persistence.AppDbContext context
+@{
+    ViewData["Title"] = "Time tracker";
+    ViewData["TimeTracker"] = true;
+}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-8">
+            <form asp-action="Index" method="get">
+                <div class="form-actions no-color form-inline">
+                    <h5 class="mr-2 mb-0">Find by date or work type: </h5><input type="text" class="form-control" name="SearchString" value="@ViewData["CurrentFilter"]" />
+                    <input type="submit" value="Search" class="btn btn-primary mr-2 ml-3" /> |
+                    <a asp-action="Index">Back to full List</a>
+                </div>
+            </form>
+            <table class="table styled-table">
+                <thead>
+                    <tr>
+                        <th scope="col">
+                            <a asp-action="Index" asp-route-sortOrder="@nameof(TaskDto.TaskId)">Id</a>
+                        </th>
+                        <th scope="col">
+                            <a asp-action="Index" asp-route-sortOrder="@nameof(TaskDto.Name)">Name</a>
+                        </th>
+                        <th scope="col">
+                            <a asp-action="Index" asp-route-sortOrder="@nameof(TaskDto.From)">From</a>
+                        </th>
+                        <th scope="col">
+                            <a asp-action="Index" asp-route-sortOrder="@nameof(TaskDto.To)">To</a>
+                        </th>
+                        <th scope="col">
+                            <a asp-action="Index" asp-route-sortOrder="@nameof(TaskDto.WorkType)">Work type</a>
+                        </th>
+                        <th scope="col">
+                            <a asp-action="Index" asp-route-sortOrder="@nameof(TaskDto.WorkTypeId)">Id</a>
+                        </th>
+                        <th scope="col">
+                            Action
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var task in Model.Tasks)
+                    {
+                        var style = task.To != null ? "" : "inWork";
+                        <tr class="@style">
+                            <td>
+                                @Html.DisplayFor(modelItem => task.TaskId)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => task.Name)
+                            </td>
+                            <td>
+                                <div class="startTimer">@task.From.ToString("MM/dd/yyyy HH:mm:ss")</div>
+                            </td>
+                            <td>
+                                @if (task.To != null)
+                                {
+                                    @Html.DisplayFor(modelItem => task.To)
+                                }
+                                else
+                                {
+                                    <div class="timer"><span class="value">0</span></div>
+                                }
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => task.WorkType)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => task.WorkTypeId)
+                            </td>
+                            <td>
+                                <form asp-action="DeleteTask" asp-controller="Task" method="post">
+                                    <input type="text" style="display: none;" value="@task.TaskId" name="id" />
+                                    <button type="submit" class="btn btn-danger m-2 w-100">Delete</button>
+                                </form>
+                                @if (task.To == null)
+                                {
+                                    <form asp-action="StopTask" asp-controller="Task" method="post">
+                                        <input type="text" style="display: none;" value="@task.TaskId" name="id" />
+                                        <button type="submit" class="btn btn-primary m-2 w-100">Stop</button>
+                                    </form>
+                                }
+                                else
+                                {
+                                    <a asp-action="EditTask" asp-controller="Task" asp-route-id="@task.TaskId" class="btn btn-secondary m-2 w-100">Edit</a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="col-4">
+            @await Html.PartialAsync("../Task/_CreateTask.cshtml", TempData["WorkTypes"] as Eria.Application.Tasks.Commands.CreateTask.CreateTaskCommand)
+        </div>
+    </div>
+</div>

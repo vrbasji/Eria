@@ -1,0 +1,36 @@
+﻿@model Eria.Application.WorkTypesList.Queries.GetWorkTypes.WorkTypesVM
+@{
+    ViewData["Title"] = "Work types";
+    ViewData["WorkTypesList"] = true;
+}
+
+<div class="row justify-content-center">
+    <div class="col-6 text-center">
+        <table class="table styled-table mt-2">
+            <thead>
+                <tr>
+                    <th>
+                        ID
+                    </th>
+                    <th>
+                        Name
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var workType in Model.WorkTypes)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => workType.WorkTypeId)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => workType.Name)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <a asp-action="CreateWorkType" asp-controller="WorkType" class="btn btn-primary">Create new work type</a>
+    </div>
+</div>

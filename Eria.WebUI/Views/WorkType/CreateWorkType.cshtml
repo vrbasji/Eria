@@ -1,0 +1,16 @@
+﻿@model Eria.Application.WorkTypesList.Commands.CreateWorkType.CreateWorkTypeCommand
+    <div class="row justify-content-center">
+        <div class="col-4 text-center">
+            <form method="post" enctype="multipart/form-data" asp-controller="WorkType" asp-action="CreateWorkType">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-inline mt-3">
+                    <label asp-for="Name" class="control-label w-25 justify-content-start"></label>
+                    <input asp-for="Name" class="form-control w-75" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-group mt-3 text-center">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
